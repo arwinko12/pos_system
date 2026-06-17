@@ -4,16 +4,19 @@ let allProducts = [];
 let currentPage = 1;
 let itemsPerPage = 8; // 8 items = 2 rows in col-sm-3
 
-function load_product_items(category) {
-
+function load_product_items(category_id = '', searchElement = '') {
     $.ajax({
         url: '/admin/pos/fetch',
         type: 'GET',
         dataType: 'json',
-
+        data:{
+            category_id: category_id,
+            searchElement: searchElement
+        },
         success: function(response) {
 
             allProducts = response;
+            // console.log(response);
             renderProducts();
             renderPagination();
         }
@@ -48,7 +51,7 @@ function renderProducts() {
         }
 
         rows += `
-        <div class="col-sm-3 g-0 col-6 mb-3">
+        <div class="col-sm-3 g-0 col-6 mb-3" onclick="addTocartbtn(${product.product_id})">
             <div class="card border-1 card-items">
 
                 <img class="card-img-top"
@@ -76,6 +79,21 @@ function renderProducts() {
     });
 
     $('#rowGallery').html(rows);
+}
+
+function addTocartbtn(product_id){
+alert(product_id)
+// $.ajax({
+//         url: '',
+//         type: 'post',
+//         data: {
+//             product_id: product_id
+//         },
+//         success: function (data) {
+//             data
+//         }
+//     });
+
 }
 
 
@@ -317,7 +335,7 @@ fetchCategoriesPerName();
             dataType: 'json',
             success: function (response) {
                 let rows = '';
-                rows = '<option selected>All Category</option>';
+                rows = '<option value="" selected>All Category</option>';
                 $.each(response, function(i, category){
                     rows +=
                 `
@@ -332,6 +350,16 @@ fetchCategoriesPerName();
    }
 
 
-$('#categoryOptions').on('change', function(){
+$('#categoryOptions').on('change', function () {
     let category = $(this).val();
+    let search = $('#searchItem').val();
+
+    load_product_items(category, search);
+});
+
+$('#searchItem').on('keyup', function () {
+    let search = $(this).val();
+    let category = $('#categoryOptions').val();
+
+    load_product_items(category, search);
 });

@@ -14,14 +14,17 @@ class CashierScreenController extends BaseController
        return view('admin/pos');
     }
 
-    public function getProductItems()
-    {
-      $model = model('ProductModel');
+public function getProductItems()
+{
+    $model = model('ProductModel');
 
-      $data = $model->getProducts();
+    $category_id = $this->request->getGet('category_id');
+    $searchElement = $this->request->getGet('searchElement');
 
-      return $this->response->setJSON($data);
-    }
+    $data = $model->getProducts($category_id, $searchElement);
+
+    return $this->response->setJSON($data);
+}
 
     public function fetchCartItems()
     {
@@ -121,4 +124,5 @@ public function removeItemfromCart()
             'message' => 'data deleted successfully!',
         ]);
 }
+
 }

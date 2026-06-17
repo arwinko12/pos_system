@@ -45,13 +45,23 @@ class ProductModel extends Model
     protected $afterDelete    = [];
 
 
-    public function getProducts()
-    {
-        $builder =  $this->db->table($this->table);
-        $builder->join('tbl_category', 'tbl_products.category_id = tbl_category.category_id', 'left');
+public function getProducts($category_id = null, $search = null)
+{
+    $builder = $this->db->table($this->table);
 
-        return $builder->get()->getResultArray();
+    $builder->select('tbl_products.*, tbl_category.category_name');
+    $builder->join('tbl_category', 'tbl_products.category_id = tbl_category.category_id', 'left');
+
+    if (!empty($category_id)) {
+        $builder->where('tbl_products.category_id', $category_id);
     }
+
+    if (!empty($search)) {
+        $builder->like('tbl_products.product_name', $search);
+    }
+
+    return $builder->get()->getResultArray();
+}
 
     public function getCategory()
     {
