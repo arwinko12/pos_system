@@ -21,6 +21,7 @@ class CashierScreenController extends BaseController
 
 public function checkout()
 {
+
     $CartItems = model('CartItems');
     $OrderModel = model('OrderModel');
     $CartModel = model('CartModel');
@@ -30,50 +31,55 @@ public function checkout()
     // $order = $CartItems->getOrders();
     $grandtotal = $this->request->getPost('grandtotal');
     $items = json_decode($this->request->getPost('items'), true);
+    $orderid = $OrderModel->getInsertID();
 
+    $date = date('Ymd');
+    $invoiceNo = 'INV-' . $date . '-' . str_pad($orderid, 4, '0', STR_PAD_LEFT);
      $orderData = [
+        '   invoice_no' => $invoiceNo,
             'subtotal' =>   $grandtotal,
             'total_amount' =>  $grandtotal,
             'payment_method' => 'cash',
         ];
 
-        $OrderModel->insert($orderData);
+        $OrderModel->insert([
+            'subtotal' => $grandtotal,
+            'total_amount' => $grandtotal,
+            'payment_method' => 'cash',
+        ]);
 
-        if ($OrderModel->affectedRows() > 0) {
+        $orderid = $OrderModel->getInsertID();
 
-            $orderid = $OrderModel->getInsertID();
+        $invoiceNo = 'INV-' . date('Ymd') . '-' .
+                     str_pad($orderid, 6, '0', STR_PAD_LEFT);
 
-            $batchData =[];
+        $OrderModel->update($orderid, [
+            'invoice_no' => $invoiceNo
+        ]);
 
+        $batchData = [];
 
-            foreach ($items as $item) {
-                
-                $batchData[] = [
-                    'order_id' => $orderid,
-                    'product_id' => $item['product_id'],
-                    'quantity'   => $item['quantity'],
-                    'subtotal' => $item['subtotal'],
-                ];
-            }
+        foreach ($items as $item) {
+            $batchData[] = [
+                'order_id' => $orderid,
+                'product_id' => $item['product_id'],
+                'quantity' => $item['quantity'],
+                'subtotal' => $item['subtotal'],
+            ];
+}
 
-            $CartItems->insertBatch($batchData);
+$CartItems->insertBatch($batchData);
 
-            if ($CartItems->affectedRows() > 0) {
-                $CartModel->where('user_id', session()->get('user_id'))->delete();
+$CartModel->where('user_id', session()->get('user_id'))
+          ->delete();
 
+return $this->response->setJSON([
+    'status' => 'success',
+    'message' => 'Order Done!',
+    'order_id' => $orderid,
+    'invoice_no' => $invoiceNo
+]);
 
-                // return $this->response->setJSON([
-                //     'status' => 'success',
-                //     'message' => 'Cart is cleared!'
-                // ]);
-
-            }
-        }
-
-    return $this->response->setJSON([
-        'status' => 'success',
-        'message' => 'Order Done!'
-    ]);
 }
 
 
@@ -255,4 +261,16 @@ public function removeItemfromCart()
         ]);
 }
 
+public function receipt()
+{
+    $OrderModel = model('OrderModel');
+
+    $data = $OrderModel->getOrderByOrderNo();
+
+    return $this->response->setJSON($data);
 }
+
+}
+
+
+

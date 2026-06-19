@@ -107,16 +107,12 @@
 
 <script>
 $(document).ready(function () {
-   $("#toggleSidebar").on("click", function () {
-
-    $("#sidebar").toggleClass("collapsed");
-    $("#content").toggleClass("expanded");
-
-    // Toggle icon
-    $("#icons").toggleClass("fa-bars fa-times");
+    $("#toggleSidebar").on("click", function () {
+        $("#sidebar").toggleClass("collapsed");
+        $("#content").toggleClass("expanded");
+        $("#icons").toggleClass("fa-bars fa-times");
+    });
 });
-});
-
 
 </script>
 

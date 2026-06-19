@@ -48,5 +48,6 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
 	$routes->post('admin/pos/clickadd', 'CashierScreenController::addtocartClick');
 	$routes->post('admin/pos/updateqty', 'CashierScreenController::updateQuantity');
 	$routes->post('admin/pos/inserOrderItems', 'CashierScreenController::checkout');
+	$routes->get('admin/pos/receipt','CashierScreenController::receipt');
 
 });

@@ -5,20 +5,25 @@
 
 <button type="button" class="btn btn-primary btn-sm mb-3" data-toggle="modal" data-target="#modal-add-users">Add Record</button>
 
-<table id="UserTable" class="table table-striped table-sm table-hover">
-	<thead>
-		<tr>
-			<th>No.</th>
-			<th>FullName</th>
-			<th>Username</th>
-			<th>Role</th>
-			<th>Action</th>
-		</tr>
-	</thead>
-	<tbody id="userTable">
-	
-	</tbody>
-</table>
+<div class="card">
+	<div class="card-body">
+		<table id="UserTable" class="table table-striped table-sm table-hover">
+			<thead>
+				<tr>
+					<th>No.</th>
+					<th>FullName</th>
+					<th>Username</th>
+					<th>Role</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody id="userTable">
+			
+			</tbody>
+		</table>
+	</div>
+</div>
+
 
 
 <div class="modal fade" id="modal-add-users">

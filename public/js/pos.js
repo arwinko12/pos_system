@@ -51,7 +51,7 @@ function renderProducts() {
         }
 
         rows += `
-        <div class="col-sm-3 g-0 col-6 mb-3" onclick="addTocartbtn(${product.product_id})">
+        <div class=" col-sm-3 col-6 p-1" >
             <div class="card border-1 card-items">
 
                 <img class="card-img-top"
@@ -71,6 +71,8 @@ function renderProducts() {
                     <p class="product-price">
                         ₱${parseFloat(product.price).toFixed(2)}
                     </p>
+                <button type="button" onclick="addTocartbtn(${product.product_id})" class="btn btn-primary rounded-circle btn-sm"><i class="fas fa-plus"></i></button>
+
 
                 </div>
             </div>
@@ -98,6 +100,103 @@ $.ajax({
         }
         });
 }
+
+$('#print-reciept-btn').on('click', function () {
+
+    $.ajax({
+        url: '/admin/pos/receipt',
+        type: 'GET',
+        dataType: 'json',
+
+        success: function (response) {
+
+            if (response.length === 0) {
+                alert('No receipt found.');
+                return;
+            }
+
+            // Dahil naka orderBy DESC ka, unang data ang latest order
+            let invoiceNo = response[0].invoice_no;
+            let orderDate = response[0].date_ordered;
+            let totalAmount = response[0].total_amount;
+            let paymentMethod = response[0].payment_method;
+
+            let items = '';
+
+            $.each(response, function (index, item) {
+
+                // Para isang invoice lang ang ipakita
+                if (item.invoice_no === invoiceNo) {
+
+                    items += `
+                        <tr>
+                            <td>${item.product_name}</td>
+                            <td>${item.quantity}</td>
+                            <td>${parseFloat(item.price).toFixed(2)}</td>
+                            <td>${parseFloat(item.subtotal).toFixed(2)}</td>
+                        </tr>
+                    `;
+                }
+            });
+
+            let receipt = `
+                <div style="font-family:monospace; padding:20px; widh: 100%;">
+                    <h3 style="text-align:center;">
+                        MY POS STORE
+                    </h3>
+
+                    <hr>
+
+                    <p>
+                        Invoice : ${invoiceNo}<br>
+                        Date : ${orderDate}<br>
+                        Payment : ${paymentMethod}
+                    </p>
+
+                    <table width="100%" border="0" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th align="left">Item</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${items}
+                        </tbody>
+                    </table>
+
+                    <hr>
+
+                    <h4 style="text-align:right;">
+                        TOTAL : ₱${parseFloat(totalAmount).toFixed(2)}
+                    </h4>
+
+                    <p style="text-align:center;">
+                        Thank you for your purchase!
+                    </p>
+                </div>
+            `;
+
+            // Popup Window
+            let printWindow = window.open('', '', 'width=400,height=600');
+
+            printWindow.document.write(receipt);
+            printWindow.document.close();
+            printWindow.focus();
+
+            // Auto Print
+            printWindow.print();
+            // printWindow.close(); // optional
+        },
+
+        error: function (xhr) {
+            console.log(xhr.responseText);
+        }
+    });
+
+});
 
 
 function renderPagination() {
@@ -293,7 +392,12 @@ $('.qty-input').each(function () {
 });
 
 
-// alert(JSON.stringify(items));
+if (items === "" || grandtotal === "") {
+    $('#cart_error_msg').html(`<div class="alert alert-danger text-center" role="alert">
+                         <strong>Oops</strong> Cart is empty!
+                     </div>`).show().fadeOut(3000);
+}else{
+        // alert(JSON.stringify(items));
     $.ajax({
         url: '/admin/pos/inserOrderItems',
         type: 'POST',
@@ -308,6 +412,7 @@ $('.qty-input').each(function () {
                    $('#cart_error_msg').html(`<div class="alert alert-success text-center" role="alert">
                         <strong>Success</strong> ${response.message}
                      </div>`).show();
+
             } else if (response.status === 'error') {
 
                  $('#cart_error_msg').html(`<div class="alert alert-danger text-center" role="alert">
@@ -321,6 +426,9 @@ $('.qty-input').each(function () {
         }
 
     });
+}
+
+
 });
 
 
@@ -451,7 +559,9 @@ fetchCategoriesPerName();
         });
       
    }
-
+$(document).ready(function() {
+    $('.js-example-basic-single').select2();
+});
 
 $('#categoryOptions').on('change', function () {
     let category = $(this).val();

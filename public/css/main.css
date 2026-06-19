@@ -5,36 +5,57 @@ body {
     background-color: lightgrey;
 }
 
-/* Sidebar */
+/* Expanded */
 #sidebar {
     width: 250px;
     height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
-    /*background: #fff;*/
     color: #000;
-    transition: all 0.3s;
+    transition: width 0.3s;
     padding-top: 60px;
     z-index: 1;
+    overflow-x: hidden;
 }
 
+/* Mini sidebar */
 #sidebar.collapsed {
-    margin-left: -250px;
+    width: 60px;
 }
+
+/* Itago ang menu text */
+#sidebar.collapsed .menu-text {
+    display: none;
+}
+
+/* Kapag naka-hover, lumaki ulit */
+#sidebar.collapsed:hover {
+    width: 250px;
+}
+
+/* Ibalik ang text kapag hover */
+#sidebar.collapsed:hover .menu-text {
+    display: inline;
+}
+
 
 /* Sidebar links */
 #sidebar a {
-    font-family: 'Inter', sans-serif;
+     font-family: 'Inter', sans-serif;
     color: #000;
     padding: 12px 20px;
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 15px;
     text-decoration: none;
     transition: 0.5s ease;
+    white-space: nowrap;
 }
 #sidebar a i {
-    color: #000;
-    transition: 0.3s ease;
+    min-width: 25px;
+    text-align: center;
+    font-size: 18px;
 }
 
 /* Hover entire menu item */
@@ -61,7 +82,7 @@ body {
 }
 
 #content.expanded {
-    margin-left: 0;
+    margin-left: 70px;
 }
 
 /* Navbar */
@@ -84,6 +105,7 @@ body {
     }
     #sidebar.active {
         margin-left: 0;
+
     }
     #content {
         margin-left: 0;
@@ -108,7 +130,6 @@ body {
 .card-items {
     /*border: none;*/
     /*border-radius: 16px;*/
-    margin: 0;
     overflow: hidden;
     background: #fff;
     box-shadow: 0 2px 10px rgba(0,0,0,0.08);

@@ -7,27 +7,29 @@
 	<div class="col-lg-8">
         <div class="row">
             <div class="col-sm-4">
-                <div class="input-group input-group-md mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroup-sizing-sm"><i class="fas fa-filter"></i></span>
-                  </div>
-                 <select class="c-select form-control" id="categoryOptions">
-                    
-                </select>
-                </div>
-            </div>
 
-            <div class="col-sm-4">
-                <div class="input-group input-group-md mb-3">
+                <div class="mb-3">
+                      <div class="input-group input-group-sm mb-3">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="inputGroup-sizing-sm"><i class="fas fa-search"></i></span>
                   </div>
                   <input type="text" class="form-control" id="searchItem" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                 </div>
+                      
+                </div>
+              
+           
+
+                
+            </div>
+            <div class="col-sm-4">
+                  <div class="mb-3">
+                    <select class="c-select form-control js-example-basic-single w-100 mb-3" name="categoryOptions[]" id="categoryOptions"></select> 
+                </div>
             </div>
         </div>
 
-		<div class="row g-0" id="rowGallery"></div>
+		<div class="row row g-0" id="rowGallery"></div>
 
 		<div class="d-flex justify-content-center mt-3">
     <ul class="pagination" id="pagination"></ul>
@@ -118,7 +120,7 @@
             <div class="row mt-4">
 
                 <div class="col-6">
-                    <button class="btn btn-outline-dark btn-block">
+                    <button class="btn btn-outline-dark btn-block" id="print-reciept-btn">
                         <i class="fas fa-print mr-2"></i>
                         Receipt
                     </button>
@@ -140,4 +142,7 @@
 
 </div>
 </div>
+
+
+
 <?= $this->endSection() ?>

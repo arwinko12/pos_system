@@ -12,7 +12,7 @@ class OrderModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['order_id', 'subtotal', 'total_amount', 'payment_method', 'date_ordered'];
+    protected $allowedFields    = ['order_id', 'invoice_no', 'subtotal', 'total_amount', 'payment_method', 'date_ordered'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -48,4 +48,35 @@ class OrderModel extends Model
     {
         return $this->db->table($this->table)->get()->getRowArray();
     }
+
+public function getOrderByOrderNo()
+{
+    $lastInvoice = $this->db
+    ->table('tbl_order')
+    ->select('invoice_no')
+    ->orderBy('order_id', 'DESC')
+    ->limit(1)
+    ->get()
+    ->getRow()
+    ->invoice_no;
+
+return $this->db
+    ->table('tbl_order')
+    ->select('
+        tbl_order.order_id,
+        tbl_order.invoice_no,
+        tbl_order.date_ordered,
+        tbl_order.total_amount,
+        tbl_order.payment_method,
+        tbl_order_items.quantity,
+        tbl_order_items.subtotal,
+        tbl_products.product_name,
+        tbl_products.price
+    ')
+    ->join('tbl_order_items', 'tbl_order.order_id = tbl_order_items.order_id')
+    ->join('tbl_products', 'tbl_order_items.product_id = tbl_products.product_id')
+    ->where('tbl_order.invoice_no', $lastInvoice)
+    ->get()
+    ->getResultArray();
+}
 }
