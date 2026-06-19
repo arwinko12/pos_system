@@ -76,12 +76,12 @@
         POS Admin Panel
     </h4>
 
-    <a class="nav-link" href="<?= base_url('admin/pos_terminal') ?>"><i class="fa fa-shopping-cart"></i> POS</a>
-     <a class="nav-link" href="<?= base_url('admin/dashboard') ?>"><i class="fa fa-home"></i> Dashboard <span class="sr-only">(current)</span></a>
-     <a class="nav-link" href="<?= base_url('admin/products') ?>"><i class="fa fa-box"></i> Products</a>
-     <a class="nav-link" href="<?= base_url('admin/category') ?>"><i class="fa fa-dice"></i> Categories</a>
-     <a class="nav-link" href="<?= base_url('admin/users') ?>"><i class="fa fa-users"></i> Users</a>
-    <a class="nav-link" href="<?= base_url('logout') ?>"><i class="fa fa-sign-out"></i> Logout</a>
+    <a class="nav-link" href="<?= base_url('admin/pos_terminal') ?>"><i class="fa fa-shopping-cart"></i> <span class="menu-text">POS</span> </a>
+     <a class="nav-link" href="<?= base_url('admin/dashboard') ?>"><i class="fa fa-home"></i> <span class="menu-text">Dashboard</span>  <span class="sr-only">(current)</span></a>
+     <a class="nav-link" href="<?= base_url('admin/products') ?>"><i class="fa fa-box"></i> <span class="menu-text">Products</span> </a>
+     <a class="nav-link" href="<?= base_url('admin/category') ?>"><i class="fa fa-dice"></i> <span class="menu-text">Categories</span> </a>
+     <a class="nav-link" href="<?= base_url('admin/users') ?>"><i class="fa fa-users"></i> <span class="menu-text">Users</span> </a>
+    <a class="nav-link" href="<?= base_url('logout') ?>"><i class="fa fa-sign-out"></i> <span class="menu-text">Logout</span> </a>
 </div>
 
 <!-- Content -->
@@ -107,13 +107,22 @@
 
 <script>
 $(document).ready(function () {
+
     $("#toggleSidebar").on("click", function () {
-        $("#sidebar").toggleClass("collapsed");
-        $("#content").toggleClass("expanded");
+
+        // MOBILE: open/close
+        if ($(window).width() <= 768) {
+            $("#sidebar").toggleClass("show");
+        } 
+        // DESKTOP: collapse/expand
+        else {
+            $("#sidebar").toggleClass("collapsed");
+        }
+
         $("#icons").toggleClass("fa-bars fa-times");
     });
-});
 
+});
 </script>
 
 </body>

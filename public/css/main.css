@@ -5,7 +5,9 @@ body {
     background-color: lightgrey;
 }
 
-/* Expanded */
+/* =========================
+   SIDEBAR BASE
+========================= */
 #sidebar {
     width: 250px;
     height: 100vh;
@@ -13,77 +15,96 @@ body {
     top: 0;
     left: 0;
     color: #000;
-    transition: width 0.3s;
+    background: #fff;
+    transition: all 0.3s ease;
     padding-top: 60px;
-    z-index: 1;
     overflow-x: hidden;
+    z-index: 1;
 }
 
-/* Mini sidebar */
-#sidebar.collapsed {
-    width: 60px;
-}
-
-/* Itago ang menu text */
-#sidebar.collapsed .menu-text {
-    display: none;
-}
-
-/* Kapag naka-hover, lumaki ulit */
-#sidebar.collapsed:hover {
-    width: 250px;
-}
-
-/* Ibalik ang text kapag hover */
-#sidebar.collapsed:hover .menu-text {
-    display: inline;
-}
-
-
-/* Sidebar links */
+/* LINKS */
 #sidebar a {
-     font-family: 'Inter', sans-serif;
-    color: #000;
-    padding: 12px 20px;
     display: flex;
     align-items: center;
-    gap: 15px;
-    text-decoration: none;
-    transition: 0.5s ease;
+    gap: 12px;
+    padding: 12px 20px;
     white-space: nowrap;
+    text-decoration: none;
+    color: #000;
 }
+
+/* ICON */
 #sidebar a i {
-    min-width: 25px;
+    width: 30px;
     text-align: center;
     font-size: 18px;
 }
 
-/* Hover entire menu item */
-#sidebar a:hover i {
-    color: #fff;
+/* TITLE */
+#sidebar h4 {
+    padding-left: 15px;
 }
 
+/* =========================
+   COLLAPSED (ICON ONLY)
+========================= */
+#sidebar.collapsed {
+    width: 70px;
+}
 
-#sidebar a:hover {
-    background: #007bff;
-    border-radius: 10px;
-    color: #fff;
+/* hide text */
+#sidebar.collapsed .menu-text,
+#sidebar.collapsed h4 {
+    display: none;
 }
-.active{
-    background: #007bff;
-    color: #fff;
-    border-radius: 10px;
+
+/* center icons */
+#sidebar.collapsed a {
+    justify-content: center;
+    padding: 12px 0;
+    gap: 0;
 }
-/* Content */
+
+/* =========================
+   CONTENT SHIFT
+========================= */
 #content {
     margin-left: 250px;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
     padding: 20px;
 }
 
-#content.expanded {
+/* when collapsed */
+#sidebar.collapsed ~ #content {
     margin-left: 70px;
 }
+
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 768px) {
+
+    #sidebar {
+        left: -250px;
+    }
+
+    #sidebar.show {
+        left: 0;
+    }
+
+    #content {
+        margin-left: 0;
+    }
+}
+
+/* ACTIVE LINK */
+.active {
+    background: #007bff;
+    color: #fff !important;
+    border-radius: 10px;
+}
+
+
 
 /* Navbar */
 .navbar {
@@ -98,7 +119,7 @@ body {
     border: none;
     border-radius: 10px;
 }*/
-
+/*
 @media (max-width: 768px) {
     #sidebar {
         margin-left: -250px;
@@ -110,7 +131,7 @@ body {
     #content {
         margin-left: 0;
     }
-}
+}*/
 .backgroundBadge-success{
     background-color: #e8f5e9;
     border-radius: 10px;
@@ -182,11 +203,7 @@ body {
     color: #6c757d;
 }
 
-@media(max-width:768px){
-    .card-items img{
-        height:150px;
-    }
-}
+
 
 .card-body {
     padding: 12px;
