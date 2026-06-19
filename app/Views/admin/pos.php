@@ -27,7 +27,7 @@
             </div>
         </div>
 
-		<div class="row" id="rowGallery"></div>
+		<div class="row g-0" id="rowGallery"></div>
 
 		<div class="d-flex justify-content-center mt-3">
     <ul class="pagination" id="pagination"></ul>
@@ -125,7 +125,9 @@
                 </div>
 
                 <div class="col-6">
-                    <button class="btn btn-primary btn-block shadow-sm">
+
+                    <input type="hidden" id="grandtotal">
+                    <button class="btn btn-primary btn-block shadow-sm" id="checkout-btn">
                         <i class="fas fa-credit-card mr-2"></i>
                         Checkout
                     </button>

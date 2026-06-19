@@ -45,5 +45,8 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
 	$routes->post('admin/post/getbarcodeItem', 'CashierScreenController::getBarcode');
 	$routes->get('admin/pos/totalamount', 'CashierScreenController::TotalCartAMount');
 	$routes->post('admin/pos/deleteCartitem', 'CashierScreenController::removeItemfromCart');
+	$routes->post('admin/pos/clickadd', 'CashierScreenController::addtocartClick');
+	$routes->post('admin/pos/updateqty', 'CashierScreenController::updateQuantity');
+	$routes->post('admin/pos/inserOrderItems', 'CashierScreenController::checkout');
 
 });

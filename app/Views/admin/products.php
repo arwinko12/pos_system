@@ -136,26 +136,31 @@
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <button type="button" class="btn btn-primary mb-3 btn-sm" data-toggle="modal" data-target="#modal-add-products">Add Record</button>
-<div class="table-responsive">
+<div class="card">
+	<div class="card-body">
+		<div class="table-responsive">
 		<table id="productTable" class="table table-hover table-striped table-sm">
-	<thead>
-		<tr>
-			<th>Product Image</th>
-			<th>Product Name</th>
-			<!-- <th>Description</th> -->
-			<th>Price</th>
-			<th>Category</th>
-			<th>Status</th>
-			<th>Action</th>
-		</tr>
-	</thead>
-	<tbody id="mytable">
+			<thead>
+				<tr>
+					<th>Product Image</th>
+					<th>Product Name</th>
+					<!-- <th>Description</th> -->
+					<th>Price</th>
+					<th>Category</th>
+					<th>Status</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody id="mytable">
 
-		
-		
-	</tbody>
-</table>
+				
+				
+			</tbody>
+		</table>
+		</div>
+	</div>
 </div>
+
 
 
 <?= $this->endSection() ?>

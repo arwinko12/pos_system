@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class CartModel extends Model
+class OrderModel extends Model
 {
-    protected $table            = 'tbl_cart';
-    protected $primaryKey       = 'cart_id';
+    protected $table            = 'tbl_order';
+    protected $primaryKey       = 'order_id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['cart_id', 'product_id', 'quantity', 'user_id'];
+    protected $allowedFields    = ['order_id', 'subtotal', 'total_amount', 'payment_method', 'date_ordered'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -44,30 +44,8 @@ class CartModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function getCarts()
-{
-    return $this->db->table('tbl_cart')
-        ->select('
-            tbl_cart.id,
-            tbl_cart.quantity,
-            tbl_cart.user_id,
-            tbl_products.product_id,
-            tbl_products.product_name,
-            tbl_products.price,
-            tbl_products.product_image
-
-        ')
-        ->join(
-            'tbl_products',
-            'tbl_products.product_id = tbl_cart.product_id'
-        )
-        ->get()
-        ->getResultArray();
-}
-
-public function getUserById($id)
-{
-   return $this->db->table($this->table)->where('cart_id', $id)->get()->getRowArray();
-}
-
+      public function getOrders()
+    {
+        return $this->db->table($this->table)->get()->getRowArray();
+    }
 }

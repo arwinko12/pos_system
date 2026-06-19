@@ -5,8 +5,9 @@
 
 <button type="button" class="btn btn-primary mb-3 btn-sm" data-toggle="modal" data-target="#modal-add-category">Add Record</button>
 
-
-<table id="mycategorytable" class="table table-striped table-sm table-hover">
+<div class="card">
+	<div class="card-body">
+		<table id="mycategorytable" class="table table-striped table-sm table-hover">
 	<thead>
 		<tr>
 			<th>No.</th>
@@ -19,6 +20,9 @@
 		
 	</tbody>
 </table>
+	</div>
+</div>
+
 
 <div class="modal fade" id="modal-add-category">
 	<div class="modal-dialog" role="document">

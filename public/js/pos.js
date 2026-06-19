@@ -82,18 +82,21 @@ function renderProducts() {
 }
 
 function addTocartbtn(product_id){
-alert(product_id)
-// $.ajax({
-//         url: '',
-//         type: 'post',
-//         data: {
-//             product_id: product_id
-//         },
-//         success: function (data) {
-//             data
-//         }
-//     });
-
+$.ajax({
+            url: '/admin/pos/clickadd',
+            type: 'post',
+            data: {
+                product_id: product_id
+            },
+            success: function (response) {
+                // console.log(response);
+                load_cart_items();
+                loadTotalAmountCart();
+            },
+            error: function(xhr, status, error){
+            console.log(xhr.responseText);
+        }
+        });
 }
 
 
@@ -164,10 +167,6 @@ $(document).on('click', '.page-link', function(e) {
 });
 
 
-function addTocart(product_id){
-	alert(product_id)
-}
-
 
 
 
@@ -209,20 +208,26 @@ function load_cart_items() {
 
                         <div class="qty-control">
 
-                            <button type="button"
-                                    class="btn btn-sm btn-light minusQty"
-                                    data-id="${cart.id}">
+                            <button
+                                type="button"
+                                class="btn btn-sm btn-light minusQty"
+                                data-id="${cart.cart_id}"
+                                data-current-qty="${qty}">
                                 <i class="fas fa-minus"></i>
                             </button>
 
                             <input type="text"
-                                   class="form-control text-center qty-input"
-                                   value="${cart.quantity}"
+                                   class="form-control text-center  qty-input" 
+                                    data-id="${cart.cart_id}" 
+                                    data-prod="${cart.product_id}"
+                                    data-qty="${qty}"
+                                    data-subtotal="${totalAmount}"
+                                   value="${qty}"
                                    readonly>
 
                             <button type="button"
                                     class="btn btn-sm btn-light plusQty"
-                                    data-id="${cart.id}">
+                                    data-id="${cart.cart_id}" data-currentQty="${qty}">
                                 <i class="fas fa-plus"></i>
                             </button>
 
@@ -246,6 +251,103 @@ function load_cart_items() {
         }
     });
 }
+
+$(document).on('click', '.minusQty', function (e) {
+    e.preventDefault();
+
+    let id = $(this).data('id');
+    let input = $(this).siblings('.qty-input');
+    let qty = parseInt(input.val()) || 0;
+
+    if (qty <= 0) {
+        return; // prevent negative values
+    }
+
+    let newQty = qty - 1;
+// alert(newQty)
+    $.ajax({
+        url: '/admin/pos/updateqty',
+        type: 'POST',
+        data: {
+            id: id,
+            newQty: newQty
+        },
+        success: function (response) {
+            // console.log(response);
+            loadTotalAmountCart();
+            load_cart_items();
+        }
+    });
+});
+
+$('#checkout-btn').on('click', function () {
+
+   let items = [];
+   let grandtotal = $('#grandtotal').val();
+$('.qty-input').each(function () {
+    items.push({
+        product_id: $(this).data('prod'),
+        quantity: parseInt($(this).val()),
+        subtotal: $(this).data('subtotal'),
+    });
+});
+
+
+// alert(JSON.stringify(items));
+    $.ajax({
+        url: '/admin/pos/inserOrderItems',
+        type: 'POST',
+        data: {
+           items: JSON.stringify(items),
+           grandtotal: grandtotal
+        },
+        success: function (response) {
+            // console.log(response);
+            load_cart_items();
+              if (response.status === "success") {
+                   $('#cart_error_msg').html(`<div class="alert alert-success text-center" role="alert">
+                        <strong>Success</strong> ${response.message}
+                     </div>`).show();
+            } else if (response.status === 'error') {
+
+                 $('#cart_error_msg').html(`<div class="alert alert-danger text-center" role="alert">
+                         <strong>Error</strong> ${response.message}
+                     </div>`).show();
+            }
+            $('#totalAmount').text('₱ 0.00');
+        },
+        error: function(xhr, status, error){
+            console.log(xhr.responseText);
+        }
+
+    });
+});
+
+
+$(document).on('click', '.plusQty', function (e) {
+    $('#cart_error_msg').hide();
+    e.preventDefault();
+    let id = $(this).data('id');
+    let input = $(this).siblings('.qty-input');
+    let qty = parseInt(input.val()) || 0;
+
+     let newQty = qty + 1; 
+
+      $.ajax({
+        url: '/admin/pos/updateqty',
+        type: 'POST',
+        data: {
+            id: id,
+            newQty: newQty
+        },
+        success: function (response) {
+            // console.log(response);
+         
+            loadTotalAmountCart();
+            load_cart_items();
+        }
+    });
+});
 
 $('#scanbarcode').on('change', function () {
      $('#cart_error_msg').hide();
@@ -297,6 +399,7 @@ function loadTotalAmountCart() {
 			success: function (response) {
                 // alert(response.total_price)
 				$('#totalAmount').text('₱ ' + parseFloat(response.total_price).toFixed(2));
+                $('#grandtotal').val(response.total_price);
 			}
 		});
 }
